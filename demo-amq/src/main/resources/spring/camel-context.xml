@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:camel="http://camel.apache.org/schema/spring"
+    xmlns:cxf="http://camel.apache.org/schema/cxf"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd        http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd http://camel.apache.org/schema/cxf     http://camel.apache.org/schema/cxf/camel-cxf.xsd">
+    <!-- Camel Routes -->
+    <cxf:cxfEndpoint address="${url.employeeWS}" id="employeeWS" serviceClass="org.jboss.fis2.demo.soap.EmployeeWSPortType">
+        <cxf:properties>
+            <entry key="dataFormat" value="POJO"/>
+            <entry key="faultStackTraceEnabled" value="true"/>
+            <entry key="loggingFeatureEnabled" value="true"/>
+        </cxf:properties>
+    </cxf:cxfEndpoint>
+    <camelContext id="camel" xmlns="http://camel.apache.org/schema/spring">
+        <route id="amq">
+            <from id="_from7" uri="amq:queue:addEmployeeBulk"/>
+            <convertBodyTo id="_convertBodyTo10" type="org.jboss.fis2.demo.soap.EmployeeList"/>
+            <setHeader headerName="operationNamespace" id="_setHeader6">
+                <constant>http://soap.demo.fis2.jboss.org/</constant>
+            </setHeader>
+            <setHeader headerName="operationName" id="_setHeader7">
+                <constant>addEmployeeBulk</constant>
+            </setHeader>
+            <to id="_to6" uri="cxf:bean:employeeWS"/>
+            <convertBodyTo id="_convertBodyTo11" type="org.jboss.fis2.demo.soap.EmployeeList"/>
+        </route>
+    </camelContext>
+</beans>

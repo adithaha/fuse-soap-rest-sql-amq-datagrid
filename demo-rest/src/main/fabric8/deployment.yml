@@ -1,0 +1,32 @@
+spec:
+  template:
+    spec:
+      containers:
+        -
+          resources:
+            requests:
+              cpu: "0.2"
+              memory: 512Mi
+            limits:
+              cpu: "1.0"
+              memory: 512Mi
+          env:
+          - name: ACTIVEMQ_SERVICE_NAME
+            value: activemq
+          - name: URL_EMPLOYEEWS
+            value: 'http://demo-soap/cxf/employeeWS'
+          - name: ACTIVEMQ_SERVICE_HOST
+            value: jboss-amq-62
+          - name: ACTIVEMQ_SERVICE_PORT
+            value: '61616'
+          - name: ACTIVEMQ_BROKER_USERNAME
+            value: amq
+          - name: ACTIVEMQ_BROKER_PASSWORD
+            value: amq
+          - name: JDG_HOSTS
+            value: jboss-datagrid65-openshi:11222
+          - name: JDG_LIFESPAN
+            value: 30
+          - name: JDG_TIMEUNIT
+            value: SECONDS
+          
