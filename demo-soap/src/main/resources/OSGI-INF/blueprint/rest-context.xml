@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<beans xmlns="http://www.springframework.org/schema/beans"
-    xmlns:camel="http://camel.apache.org/schema/spring"
-    xmlns:cxf="http://camel.apache.org/schema/cxf"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd        http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd http://camel.apache.org/schema/cxf     http://camel.apache.org/schema/cxf/camel-cxf.xsd">
-    <!-- Define a traditional camel context here -->
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+    xmlns:cm="http://aries.apache.org/blueprint/xmlns/blueprint-cm/v1.0.0"
+    xmlns:cxf="http://camel.apache.org/schema/blueprint/cxf"
+    xmlns:cxf-core="http://cxf.apache.org/blueprint/core"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="              http://www.osgi.org/xmlns/blueprint/v1.0.0              http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd              http://camel.apache.org/schema/blueprint/cxf               http://camel.apache.org/schema/blueprint/cxf/camel-cxf.xsd              http://camel.apache.org/schema/blueprint               http://camel.apache.org/schema/blueprint/camel-blueprint.xsd">
     <cxf:cxfEndpoint address="/employeeWS" id="employeeWS" serviceClass="org.jboss.fis2.demo.soap.EmployeeWS">
         <cxf:properties>
             <entry key="dataFormat" value="POJO"/>
@@ -11,7 +11,8 @@
             <entry key="loggingFeatureEnabled" value="false"/>
         </cxf:properties>
     </cxf:cxfEndpoint>
-    <camelContext id="camel" xmlns="http://camel.apache.org/schema/spring">
+    <bean class="org.jboss.fis2.demo.soap.MyTransformer" id="myTransformer"/>
+    <camelContext id="camel" xmlns="http://camel.apache.org/schema/blueprint">
         <route id="employeeWS">
             <from id="_from1" uri="employeeWS"/>
             <removeHeader headerName="SOAPAction" id="_removeHeader1"/>
@@ -26,11 +27,11 @@
             <setProperty id="_setProperty1" propertyName="employee">
                 <simple>${body}</simple>
             </setProperty>
-            <to uri="sql:             select * from employee where id = :#${body}?             dataSource=dsFis2&amp;outputType=SelectOne             &amp;outputClass=org.jboss.fis2.demo.soap.Employee"/>
+            <to id="_to1" uri="sql:             select * from employee where id = :#${body}?             dataSource=dsFis2&amp;outputType=SelectOne             &amp;outputClass=org.jboss.fis2.demo.soap.Employee"/>
             <setProperty id="_setProperty2" propertyName="employee">
                 <simple>${body}</simple>
             </setProperty>
-            <to uri="sql:             select * from phone where employee_id = :#${property.employee.id}?             dataSource=dsFis2&amp;outputType=SelectList             &amp;outputClass=org.jboss.fis2.demo.soap.Phone"/>
+            <to id="_to2" uri="sql:             select * from phone where employee_id = :#${property.employee.id}?             dataSource=dsFis2&amp;outputType=SelectList             &amp;outputClass=org.jboss.fis2.demo.soap.Phone"/>
             <bean id="_bean1" method="putPhoneList" ref="myTransformer"/>
             <setBody id="_setBody1">
                 <simple>${property.employee}</simple>
@@ -43,14 +44,14 @@
             <setProperty id="_setProperty3" propertyName="employeeList">
                 <method method="createEmployeeList" ref="myTransformer"/>
             </setProperty>
-            <to uri="sql:             select * from employee?             dataSource=dsFis2&amp;outputType=SelectList             &amp;outputClass=org.jboss.fis2.demo.soap.Employee"/>
+            <to id="_to3" uri="sql:             select * from employee?             dataSource=dsFis2&amp;outputType=SelectList             &amp;outputClass=org.jboss.fis2.demo.soap.Employee"/>
             <bean id="_bean2" method="putEmployeeList" ref="myTransformer"/>
             <split id="_split1">
                 <simple>${property.employeeList.employeeList}</simple>
                 <setProperty id="_setProperty4" propertyName="employee">
                     <simple>${body}</simple>
                 </setProperty>
-                <to uri="sql:               select * from phone where employee_id = :#${property.employee.id}?               dataSource=dsFis2&amp;outputType=SelectList               &amp;outputClass=org.jboss.fis2.demo.soap.Phone"/>
+                <to id="_to4" uri="sql:               select * from phone where employee_id = :#${property.employee.id}?               dataSource=dsFis2&amp;outputType=SelectList               &amp;outputClass=org.jboss.fis2.demo.soap.Phone"/>
                 <bean id="_bean3" method="putPhoneList" ref="myTransformer"/>
             </split>
             <setBody id="_setBody2">
@@ -65,7 +66,7 @@
             <setProperty id="_setProperty5" propertyName="employeeList">
                 <method method="createEmployeeList" ref="myTransformer"/>
             </setProperty>
-            <to uri="sql:             select * from employee where name like :#${body}?             dataSource=dsFis2&amp;outputType=SelectList             &amp;outputClass=org.jboss.fis2.demo.soap.Employee"/>
+            <to id="_to5" uri="sql:             select * from employee where name like :#${body}?             dataSource=dsFis2&amp;outputType=SelectList             &amp;outputClass=org.jboss.fis2.demo.soap.Employee"/>
             <bean id="_bean4" method="putEmployeeList" ref="myTransformer"/>
             <log id="_log8" message="employeelist ${property.employeeList}"/>
             <split id="_split2">
@@ -73,7 +74,7 @@
                 <setProperty id="_setProperty6" propertyName="employee">
                     <simple>${body}</simple>
                 </setProperty>
-                <to uri="sql:               select * from phone where employee_id = :#${property.employee.id}?               dataSource=dsFis2&amp;outputType=SelectList               &amp;outputClass=org.jboss.fis2.demo.soap.Phone"/>
+                <to id="_to6" uri="sql:               select * from phone where employee_id = :#${property.employee.id}?               dataSource=dsFis2&amp;outputType=SelectList               &amp;outputClass=org.jboss.fis2.demo.soap.Phone"/>
                 <bean id="_bean5" method="putPhoneList" ref="myTransformer"/>
             </split>
             <setBody id="_setBody3">
@@ -91,7 +92,7 @@
             <setHeader headerName="CamelSqlRetrieveGeneratedKeys" id="_setHeader1">
                 <constant>true</constant>
             </setHeader>
-            <to uri="sql:             insert into employee (name, address) values (:#${body.name}, :#${body.address})?             dataSource=dsFis2&amp;outputType=SelectOne"/>
+            <to id="_to7" uri="sql:             insert into employee (name, address) values (:#${body.name}, :#${body.address})?             dataSource=dsFis2&amp;outputType=SelectOne"/>
             <log id="_log10" message="body: ${body}"/>
             <log id="_log11" message="key: ${header.CamelSqlGeneratedKeyRows[0][id]}"/>
             <script id="_script1">
@@ -100,7 +101,7 @@
             <split id="_split3">
                 <simple>${property.employee.phoneList}</simple>
                 <log id="_log12" message="phone: ${body}"/>
-                <to uri="sql:               insert into phone (employee_id, phone, type) values (:#${property.employee.id}, :#${body.phone}, :#${body.type})?               dataSource=dsFis2&amp;outputType=SelectOne"/>
+                <to id="_to8" uri="sql:               insert into phone (employee_id, phone, type) values (:#${property.employee.id}, :#${body.phone}, :#${body.type})?               dataSource=dsFis2&amp;outputType=SelectOne"/>
             </split>
             <setBody id="_setBody4">
                 <simple>${property.employee}</simple>
@@ -108,24 +109,24 @@
             <log id="_log2" message="send response ${body}"/>
         </route>
         <route id="addEmployeeBulk">
-            <from uri="direct:addEmployeeBulk"/>
-            <convertBodyTo type="org.jboss.fis2.demo.soap.EmployeeList"/>
-            <log message="receive request ${body}"/>
-            <delay>
-            	<constant>5000</constant>
+            <from id="_from6" uri="direct:addEmployeeBulk"/>
+            <convertBodyTo id="_convertBodyTo4" type="org.jboss.fis2.demo.soap.EmployeeList"/>
+            <log id="_log13" message="receive request ${body}"/>
+            <delay id="_delay1">
+                <constant>5000</constant>
             </delay>
-            <setProperty propertyName="employeeList">
+            <setProperty id="_setProperty8" propertyName="employeeList">
                 <simple>${body}</simple>
             </setProperty>
-            <split>
+            <split id="_split4">
                 <simple>${property.employeeList.employeeList}</simple>
-                <log message="employee: ${body}"/>
-                <to uri="direct:addEmployee"/>
+                <log id="_log14" message="employee: ${body}"/>
+                <to id="_to9" uri="direct:addEmployee"/>
             </split>
-            <setBody>
+            <setBody id="_setBody5">
                 <simple>${property.employeeList}</simple>
             </setBody>
-            <log message="send response ${body}"/>
+            <log id="_log15" message="send response ${body}"/>
         </route>
     </camelContext>
-</beans>
+</blueprint>

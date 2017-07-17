@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<beans xmlns="http://www.springframework.org/schema/beans"
-    xmlns:camel="http://camel.apache.org/schema/spring"
-    xmlns:cxf="http://camel.apache.org/schema/cxf"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd        http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd http://camel.apache.org/schema/cxf     http://camel.apache.org/schema/cxf/camel-cxf.xsd">
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+    xmlns:cm="http://aries.apache.org/blueprint/xmlns/blueprint-cm/v1.0.0"
+    xmlns:cxf="http://camel.apache.org/schema/blueprint/cxf"
+    xmlns:cxf-core="http://cxf.apache.org/blueprint/core"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="              http://www.osgi.org/xmlns/blueprint/v1.0.0              http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd              http://camel.apache.org/schema/blueprint/cxf               http://camel.apache.org/schema/blueprint/cxf/camel-cxf.xsd              http://camel.apache.org/schema/blueprint               http://camel.apache.org/schema/blueprint/camel-blueprint.xsd">
     <!-- Camel Routes -->
     <cxf:cxfEndpoint address="${url.employeeWS}" id="employeeWS" serviceClass="org.jboss.fis2.demo.soap.EmployeeWSPortType">
         <cxf:properties>
@@ -14,10 +15,11 @@
     <cxf:rsServer address="/employeeRS" id="employeeRS"
         loggingFeatureEnabled="true" serviceClass="org.jboss.fis2.demo.rest.EmployeeRS">
         <cxf:providers>
-            <ref bean="jsonProvider"/>
+            <ref component-id="jsonProvider"/>
         </cxf:providers>
     </cxf:rsServer>
-    <camelContext id="camel" xmlns="http://camel.apache.org/schema/spring">
+    <camelContext id="camel" xmlns="http://camel.apache.org/schema/blueprint">
+        <propertyPlaceholder id="properties" location="blueprint:org.jboss.fis2.demo"/>
         <route id="employeeRS">
             <from id="_from1" uri="cxfrs:bean:employeeRS"/>
             <recipientList id="_recipientList1">
@@ -84,6 +86,9 @@
         </route>
         <route id="getEmployeeAll">
             <from id="_from7" uri="direct:getEmployeeAll"/>
+            <setHeader headerName="CamelInfinispanCacheName" id="_setHeader12">
+                <constant>{{jdg.cache}}</constant>
+            </setHeader>
             <setHeader headerName="CamelInfinispanOperation" id="_setHeader4">
                 <constant>CamelInfinispanOperationGet</constant>
             </setHeader>
@@ -121,4 +126,4 @@
             </choice>
         </route>
     </camelContext>
-</beans>
+</blueprint>
