@@ -4,12 +4,9 @@
     xmlns:cxf="http://camel.apache.org/schema/blueprint/cxf"
     xmlns:cxf-core="http://cxf.apache.org/blueprint/core"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="              http://www.osgi.org/xmlns/blueprint/v1.0.0              http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd              http://camel.apache.org/schema/blueprint/cxf               http://camel.apache.org/schema/blueprint/cxf/camel-cxf.xsd              http://camel.apache.org/schema/blueprint               http://camel.apache.org/schema/blueprint/camel-blueprint.xsd">
-
-
-    <bean id="jsonProvider" class="org.apache.cxf.jaxrs.provider.json.JSONProvider">
-		<property name="dropRootElement" value="true" />
-		<property name="supportUnwrapped" value="false" />
-		<property name="ignoreNamespaces" value="true" />
-	</bean>
-
+    <bean class="org.apache.cxf.jaxrs.provider.json.JSONProvider" id="jsonProvider">
+        <property name="dropRootElement" value="true"/>
+        <property name="supportUnwrapped" value="false"/>
+        <property name="ignoreNamespaces" value="true"/>
+    </bean>
 </blueprint>
