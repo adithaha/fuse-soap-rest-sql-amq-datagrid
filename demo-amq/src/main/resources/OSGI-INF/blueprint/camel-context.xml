@@ -12,7 +12,7 @@
             <entry key="loggingFeatureEnabled" value="true"/>
         </cxf:properties>
     </cxf:cxfEndpoint>
-    <camelContext id="camel" xmlns="http://camel.apache.org/schema/blueprint">
+    <camelContext id="demo-amq" xmlns="http://camel.apache.org/schema/blueprint">
         <route id="amq">
             <from id="_from7" uri="amq:queue:addEmployeeBulk"/>
             <convertBodyTo id="_convertBodyTo10" type="org.jboss.fis2.demo.soap.EmployeeList"/>

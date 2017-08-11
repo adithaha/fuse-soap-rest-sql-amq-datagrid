@@ -30,7 +30,6 @@
     <dependency>
       <groupId>org.apache.activemq</groupId>
       <artifactId>activemq-camel</artifactId>
-      <version>5.11.0.redhat-630187</version>
     </dependency>
     <dependency>
       <groupId>org.apache.activemq</groupId>

@@ -12,7 +12,7 @@
         </cxf:properties>
     </cxf:cxfEndpoint>
     <bean class="org.jboss.fis2.demo.soap.MyTransformer" id="myTransformer"/>
-    <camelContext id="camel" xmlns="http://camel.apache.org/schema/blueprint">
+    <camelContext id="demo-soap" xmlns="http://camel.apache.org/schema/blueprint">
         <route id="employeeWS">
             <from id="_from1" uri="employeeWS"/>
             <removeHeader headerName="SOAPAction" id="_removeHeader1"/>

@@ -18,7 +18,7 @@
             <ref component-id="jsonProvider"/>
         </cxf:providers>
     </cxf:rsServer>
-    <camelContext id="camel" xmlns="http://camel.apache.org/schema/blueprint">
+    <camelContext id="demo-rest" xmlns="http://camel.apache.org/schema/blueprint">
         <propertyPlaceholder id="properties" location="blueprint:org.jboss.fis2.demo"/>
         <route id="employeeRS">
             <from id="_from1" uri="cxfrs:bean:employeeRS"/>
