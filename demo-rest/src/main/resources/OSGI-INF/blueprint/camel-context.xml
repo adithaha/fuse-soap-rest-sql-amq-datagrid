@@ -4,6 +4,7 @@
     xmlns:cxf="http://camel.apache.org/schema/blueprint/cxf"
     xmlns:cxf-core="http://cxf.apache.org/blueprint/core"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="              http://www.osgi.org/xmlns/blueprint/v1.0.0              http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd              http://camel.apache.org/schema/blueprint/cxf               http://camel.apache.org/schema/blueprint/cxf/camel-cxf.xsd              http://camel.apache.org/schema/blueprint               http://camel.apache.org/schema/blueprint/camel-blueprint.xsd">
+    <bean class="org.jboss.fis2.demo.rest.Processor" id="processor"/>
     <!-- Camel Routes -->
     <cxf:cxfEndpoint address="${url.employeeWS}" id="employeeWS" serviceClass="org.jboss.fis2.demo.soap.EmployeeWSPortType">
         <cxf:properties>
@@ -22,6 +23,9 @@
         <propertyPlaceholder id="properties" location="blueprint:org.jboss.fis2.demo"/>
         <route id="employeeRS">
             <from id="_from1" uri="cxfrs:bean:employeeRS"/>
+            <setProperty id="_setProperty1" propertyName="DEMO_status">
+                <method bean="processor" method="createStatus"/>
+            </setProperty>
             <recipientList id="_recipientList1">
                 <simple>direct:${header.operationName}</simple>
             </recipientList>
@@ -31,8 +35,20 @@
             <setHeader headerName="operationNamespace" id="_setHeader1">
                 <constant>http://soap.demo.fis2.jboss.org/</constant>
             </setHeader>
-            <to id="_to1" uri="cxf:bean:employeeWS"/>
-            <convertBodyTo id="_convertBodyTo1" type="org.jboss.fis2.demo.soap.EmployeeList"/>
+            <doTry id="_doTry2">
+                <to id="_to1" uri="direct:backend-soap"/>
+                <convertBodyTo id="_convertBodyTo1" type="org.jboss.fis2.demo.soap.EmployeeList"/>
+                <doCatch>
+                    <exception>java.io.IOException</exception>
+                    <script>
+                        <simple>${property.DEMO_status.setCode('99')}</simple>
+                    </script>
+                    <script>
+                        <simple>${property.DEMO_status.setMessage('Cannot connect to backend')}</simple>
+                    </script>
+                </doCatch>
+            </doTry>
+            <bean id="_bean1" method="transformEmployeeListResponse" ref="processor"/>
         </route>
         <route id="getEmployee">
             <from id="_from3" uri="direct:getEmployee"/>
@@ -43,7 +59,7 @@
             <setHeader headerName="operationNamespace" id="_setHeader2">
                 <constant>http://soap.demo.fis2.jboss.org/</constant>
             </setHeader>
-            <to id="_to2" uri="cxf:bean:employeeWS"/>
+            <to id="_to2" uri="direct:backend-soap"/>
             <convertBodyTo id="_convertBodyTo2" type="org.jboss.fis2.demo.soap.Employee"/>
         </route>
         <route id="getEmployeeList">
@@ -55,8 +71,20 @@
             <setHeader headerName="operationNamespace" id="_setHeader3">
                 <constant>http://soap.demo.fis2.jboss.org/</constant>
             </setHeader>
-            <to id="_to3" uri="cxf:bean:employeeWS"/>
-            <convertBodyTo id="_convertBodyTo5" type="org.jboss.fis2.demo.soap.EmployeeList"/>
+            <doTry id="_doTry1">
+                <to id="_to3" uri="direct:backend-soap"/>
+                <convertBodyTo id="_convertBodyTo5" type="org.jboss.fis2.demo.soap.EmployeeList"/>
+                <doCatch>
+                    <exception>java.io.IOException</exception>
+                    <script>
+                        <simple>${property.DEMO_status.setCode('99')}</simple>
+                    </script>
+                    <script>
+                        <simple>${property.DEMO_status.setMessage('Cannot connect to backend')}</simple>
+                    </script>
+                </doCatch>
+            </doTry>
+            <bean id="_bean2" method="transformEmployeeListResponse" ref="processor"/>
         </route>
         <route id="addEmployee">
             <from id="_from8" uri="direct:addEmployee"/>
@@ -64,7 +92,7 @@
             <setHeader headerName="operationNamespace" id="_setHeader9">
                 <constant>http://soap.demo.fis2.jboss.org/</constant>
             </setHeader>
-            <to id="_to9" uri="cxf:bean:employeeWS"/>
+            <to id="_to9" uri="direct:backend-soap"/>
             <convertBodyTo id="_convertBodyTo12" type="org.jboss.fis2.demo.soap.Employee"/>
         </route>
         <route id="addEmployeeBulk">
@@ -73,8 +101,20 @@
             <setHeader headerName="operationNamespace" id="_setHeader5">
                 <constant>http://soap.demo.fis2.jboss.org/</constant>
             </setHeader>
-            <to id="_to5" uri="cxf:bean:employeeWS"/>
-            <convertBodyTo id="_convertBodyTo9" type="org.jboss.fis2.demo.soap.EmployeeList"/>
+            <doTry id="_doTry3">
+                <to id="_to5" uri="direct:backend-soap"/>
+                <convertBodyTo id="_convertBodyTo9" type="org.jboss.fis2.demo.soap.EmployeeList"/>
+                <doCatch>
+                    <exception>java.io.IOException</exception>
+                    <script>
+                        <simple>${property.DEMO_status.setCode('99')}</simple>
+                    </script>
+                    <script>
+                        <simple>${property.DEMO_status.setMessage('Cannot connect to backend')}</simple>
+                    </script>
+                </doCatch>
+            </doTry>
+            <bean id="_bean3" method="transformEmployeeListResponse" ref="processor"/>
         </route>
         <route id="addEmployeeBulkAsync">
             <from id="_from5" uri="direct:addEmployeeBulkAsync"/>
@@ -121,9 +161,17 @@
                     <setBody id="_setBody4">
                         <simple>${header.CamelInfinispanOperationResult}</simple>
                     </setBody>
-                    <convertBodyTo id="_convertBodyTo10" type="org.jboss.fis2.demo.soap.EmployeeList"/>
+                    <convertBodyTo id="_convertBodyTo10" type="org.jboss.fis2.demo.rest.EmployeeListResponse"/>
                 </otherwise>
             </choice>
+        </route>
+        <route id="backend-soap">
+            <from id="_from9" uri="direct:backend-soap"/>
+            <onException id="_onException1">
+                <exception>java.io.IOException</exception>
+                <redeliveryPolicy maximumRedeliveries="3" redeliveryDelay="1000"/>
+            </onException>
+            <to id="_to11" uri="cxf:bean:employeeWS"/>
         </route>
     </camelContext>
 </blueprint>

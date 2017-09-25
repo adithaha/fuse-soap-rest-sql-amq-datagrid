@@ -8,13 +8,13 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 
 
-@Consumes({"application/xml","application/json"})
-@Produces({"application/xml","application/json"})
+@Consumes({"application/json"})
+@Produces({"application/json"})
 public class EmployeeRS {
 
 	@GET
     @Path("/getemployeelist/{name}")
-    public org.jboss.fis2.demo.soap.EmployeeList getEmployeeList(
+    public EmployeeListResponse getEmployeeList(
     	@PathParam("name")  java.lang.String arg0
     ) {
     	return null;
@@ -30,7 +30,7 @@ public class EmployeeRS {
 
 	@POST
     @Path("/addemployeebulk")
-    public org.jboss.fis2.demo.soap.EmployeeList addEmployeeBulk(
+    public EmployeeListResponse addEmployeeBulk(
         org.jboss.fis2.demo.soap.EmployeeList arg0
     ) {
     	return null;
@@ -46,7 +46,7 @@ public class EmployeeRS {
 	
 	@GET
     @Path("/getemployeeall")
-    public org.jboss.fis2.demo.soap.EmployeeList getEmployeeAll() {
+    public EmployeeListResponse getEmployeeAll() {
     	return null;
     }
 
