@@ -49,8 +49,6 @@ public class MyTransformer {
     		@Body List<Phone> phoneList
     		) {
     	
-    	LOGGER.info(""+(employee == null));
-    	LOGGER.info(""+(phoneList == null));
     	employee.setPhoneList(phoneList);
     }
     
@@ -65,7 +63,7 @@ public class MyTransformer {
     		@Body List<Employee> employeeL
     		
     		) {
-    	employeelist.setEmployeeList(employeeL);
+    	employeelist.setEmployees(employeeL);
     }
     
     public List<Employee> dummyEmployeeList(

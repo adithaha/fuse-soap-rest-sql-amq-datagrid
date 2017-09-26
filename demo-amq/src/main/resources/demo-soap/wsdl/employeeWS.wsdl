@@ -6,7 +6,7 @@
   <xs:element name="phone" type="tns:phone"/>
   <xs:complexType name="employeeList">
     <xs:sequence>
-      <xs:element maxOccurs="unbounded" minOccurs="0" name="employeeList" nillable="true" type="tns:employee"/>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="employees" nillable="true" type="tns:employee"/>
     </xs:sequence>
   </xs:complexType>
   <xs:complexType name="employee">
@@ -19,7 +19,7 @@
   </xs:complexType>
   <xs:complexType name="phone">
     <xs:sequence>
-      <xs:element minOccurs="0" name="phone" type="xs:string"/>
+      <xs:element minOccurs="0" name="number" type="xs:string"/>
       <xs:element minOccurs="0" name="type" type="xs:string"/>
     </xs:sequence>
   </xs:complexType>
@@ -205,7 +205,7 @@
   </wsdl:binding>
   <wsdl:service name="EmployeeWS">
     <wsdl:port binding="tns:EmployeeWSSoapBinding" name="EmployeeWSPort">
-      <soap:address location="http://localhost:8080/cxf/employeeWS"/>
+      <soap:address location="http://localhost:8182/cxf/employeeWS"/>
     </wsdl:port>
   </wsdl:service>
 </wsdl:definitions>

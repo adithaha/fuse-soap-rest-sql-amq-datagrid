@@ -24,10 +24,15 @@ profile-edit --repositories mvn:org.apache.camel/camel-jbossdatagrid/6.6.0.Final
 
 profile-edit --features camel-jbossdatagrid demo-rest
 
+profile-edit --features camel-servlet demo-rest
+
+profile-edit --features camel-jackson demo-rest
+
+profile-edit --features camel-swagger-java demo-rest
+
 profile-edit --features activemq-camel demo-rest
 
 profile-edit --bundle mvn:org.jboss.fis2.demo/demo-rest/1.0.0-SNAPSHOT demo-rest
-
 
 profile-create --parent jboss-fuse-full demo-amq
 

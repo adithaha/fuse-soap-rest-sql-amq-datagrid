@@ -2,22 +2,22 @@ package org.jboss.fis2.demo.soap;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
-@XmlRootElement
+@XmlRootElement(name="phone")
 public class Phone {
 
-	private String phone;
+	private String number;
 	private String type;
 	
-	public String getPhone() {
-		return phone;
-	}
-	public void setPhone(String phone) {
-		this.phone = phone;
-	}
 	public String getType() {
 		return type;
 	}
 	public void setType(String type) {
 		this.type = type;
+	}
+	public String getNumber() {
+		return number;
+	}
+	public void setNumber(String number) {
+		this.number = number;
 	}
 }

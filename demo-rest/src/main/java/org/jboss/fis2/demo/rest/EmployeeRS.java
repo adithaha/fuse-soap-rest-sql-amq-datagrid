@@ -6,12 +6,22 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
 
 
-@Consumes({"application/json"})
-@Produces({"application/json"})
+@Consumes({MediaType.APPLICATION_JSON})
+@Produces({MediaType.APPLICATION_JSON})
 public class EmployeeRS {
 
+	
+	@POST
+    @Path("/testing")
+    public org.jboss.fis2.demo.soap.Phone testing(
+        org.jboss.fis2.demo.soap.Phone arg0
+    ) {
+    	return null;
+    }
+	
 	@GET
     @Path("/getemployeelist/{name}")
     public EmployeeListResponse getEmployeeList(
@@ -38,7 +48,7 @@ public class EmployeeRS {
 
 	@POST
     @Path("/addemployeebulkasync")
-    public String addEmployeeBulkAsync(
+    public Status addEmployeeBulkAsync(
         org.jboss.fis2.demo.soap.EmployeeList arg0
     ) {
     	return null;

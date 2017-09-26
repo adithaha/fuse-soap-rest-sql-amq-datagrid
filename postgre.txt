@@ -19,7 +19,7 @@ CREATE TABLE phone
 (
   id serial NOT NULL,
   employee_id integer,
-  phone character varying(255),
+  number character varying(255),
   type character varying(255),
   CONSTRAINT phone_pkey PRIMARY KEY (id ),
   CONSTRAINT fk_hbvecruwjtpc6u53ujlmjpvtw FOREIGN KEY (employee_id)

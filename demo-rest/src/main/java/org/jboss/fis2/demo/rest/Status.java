@@ -1,5 +1,8 @@
 package org.jboss.fis2.demo.rest;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
+@XmlRootElement
 public class Status {
 
 	private String code;

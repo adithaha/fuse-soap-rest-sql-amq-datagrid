@@ -13,7 +13,7 @@
         </cxf:properties>
     </cxf:cxfEndpoint>
     <camelContext id="demo-amq" xmlns="http://camel.apache.org/schema/blueprint">
-        <route id="amq">
+        <route id="amq-addemployeebulk">
             <from id="_from7" uri="amq:queue:addEmployeeBulk"/>
             <convertBodyTo id="_convertBodyTo10" type="org.jboss.fis2.demo.soap.EmployeeList"/>
             <setHeader headerName="operationNamespace" id="_setHeader6">
@@ -24,6 +24,18 @@
             </setHeader>
             <to id="_to6" uri="cxf:bean:employeeWS"/>
             <convertBodyTo id="_convertBodyTo11" type="org.jboss.fis2.demo.soap.EmployeeList"/>
+        </route>
+        <route id="amq-addemployee">
+            <from id="_from1" uri="amq:queue:addEmployee"/>
+            <convertBodyTo id="_convertBodyTo1" type="org.jboss.fis2.demo.soap.Employee"/>
+            <setHeader headerName="operationNamespace" id="_setHeader1">
+                <constant>http://soap.demo.fis2.jboss.org/</constant>
+            </setHeader>
+            <setHeader headerName="operationName" id="_setHeader2">
+                <constant>addEmployee</constant>
+            </setHeader>
+            <to id="_to1" uri="cxf:bean:employeeWS"/>
+            <convertBodyTo id="_convertBodyTo2" type="org.jboss.fis2.demo.soap.Employee"/>
         </route>
     </camelContext>
 </blueprint>

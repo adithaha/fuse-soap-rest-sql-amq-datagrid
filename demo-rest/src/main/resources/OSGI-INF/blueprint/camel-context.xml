@@ -19,8 +19,77 @@
             <ref component-id="jsonProvider"/>
         </cxf:providers>
     </cxf:rsServer>
+    <!-- <reference id="httpService" interface="org.osgi.service.http.HttpService"/>
+    <bean
+        class="org.apache.camel.component.servlet.osgi.OsgiServletRegisterer"
+        destroy-method="unregister"
+        id="bean-1944bcbe-2492-4008-b571-854d6ac2364c" init-method="register">
+        <property name="alias" value="/rest"/>
+        <property name="httpService" ref="httpService"/>
+        <property name="servlet" ref="camelServlet"/>
+    </bean>
+    <bean
+        class="org.apache.camel.component.servlet.CamelHttpTransportServlet" id="camelServlet"/> -->
     <camelContext id="demo-rest" xmlns="http://camel.apache.org/schema/blueprint">
         <propertyPlaceholder id="properties" location="blueprint:org.jboss.fis2.demo"/>
+        <!-- <restConfiguration apiContextListing="true"
+            apiContextPath="api-docs" bindingMode="json" host="192.168.199.1"
+            component="servlet" contextPath="/rest" enableCORS="true" port="8182" apiContextIdPattern="demo-rest">
+            we want json output in pretty mode
+            <dataFormatProperty key="prettyPrint" value="true"/>
+            setup swagger api descriptions
+            <apiProperty key="swagger.version" value="2.0"/>
+            <apiProperty key="cors" value="true"/>
+            <apiProperty key="base.path" value="rest"/>
+            <apiProperty key="api.version" value="1.0.0"/>
+            <apiProperty key="api.title" value="Kereta Api RTS-NG"/>
+            <apiProperty key="api.description" value="Kereta Api RTS-NG API Definition"/>
+            <apiProperty key="api.contact.name" value="PT. Kereta Api Indonesia"/>
+        </restConfiguration>
+        <rest path="/employeeRS">
+            <get outType="org.jboss.fis2.demo.rest.EmployeeListResponse" uri="/getemployeelist/{name}">
+                <description>getEmployeeList</description>
+                <param dataType="string" description="Employee name"
+                    name="name" required="true" type="path"/>
+                <to uri="direct:getEmployeeList"/>
+            </get>
+            <get outType="org.jboss.fis2.demo.soap.Employee" uri="/getemployee/{id}">
+                <description>getEmployee</description>
+                <param dataType="integer" description="Employee ID"
+                    name="name" required="true" type="path"/>
+                <to uri="direct:getEmployee"/>
+            </get>
+            <post outType="org.jboss.fis2.demo.rest.EmployeeListResponse"
+                type="org.jboss.fis2.demo.soap.EmployeeList" uri="/addemployeebulk">
+                <description>Add employee bulk</description>
+                <to uri="direct:addEmployeeBulk"/>
+            </post>
+            <post outType="org.jboss.fis2.demo.soap.Employee"
+                type="org.jboss.fis2.demo.soap.Employee" uri="/addemployee" >
+                <description>Add employee</description>
+                <to uri="direct:addEmployee"/>
+            </post>
+            <post outType="org.jboss.fis2.demo.rest2.Employee"
+                type="org.jboss.fis2.demo.rest2.Phone" uri="/testing">
+                <description>Testing</description>
+                <to uri="direct:addEmployeeBulk"/>
+            </post>
+            <post outType="org.jboss.fis2.demo.rest2.Phone2"
+                type="org.jboss.fis2.demo.rest2.Phone" uri="/testing2">
+                <description>Testing</description>
+                <to uri="direct:addEmployeeBulk"/>
+            </post>
+            <post outType="org.jboss.fis2.demo.soap.Phone"
+                type="org.jboss.fis2.demo.soap.Employee" uri="/testing2">
+                <description>Testing2</description>
+                <to uri="direct:addEmployeeBulk"/>
+            </post>
+            <post outType="org.jboss.fis2.demo.soap.Phone"
+                type="org.jboss.fis2.demo.soap.EmployeeList2" uri="/testing3">
+                <description>Testing3</description>
+                <to uri="direct:addEmployeeBulk"/>
+            </post>
+        </rest> -->
         <route id="employeeRS">
             <from id="_from1" uri="cxfrs:bean:employeeRS"/>
             <setProperty id="_setProperty1" propertyName="DEMO_status">
@@ -30,6 +99,11 @@
                 <simple>direct:${header.operationName}</simple>
             </recipientList>
         </route>
+        <route id="testing">
+            <from id="_from10" uri="direct:testing"/>
+            <convertBodyTo id="_convertBodyTo13" type="org.jboss.fis2.demo.soap.Phone"/>
+            <log id="_log3" message="testing: ${body}"/>
+        </route>
         <route id="getEmployeeAllWS">
             <from id="_from2" uri="direct:getEmployeeAllWS"/>
             <setHeader headerName="operationNamespace" id="_setHeader1">
@@ -38,12 +112,12 @@
             <doTry id="_doTry2">
                 <to id="_to1" uri="direct:backend-soap"/>
                 <convertBodyTo id="_convertBodyTo1" type="org.jboss.fis2.demo.soap.EmployeeList"/>
-                <doCatch>
+                <doCatch id="_doCatch1">
                     <exception>java.io.IOException</exception>
-                    <script>
+                    <script id="_script1">
                         <simple>${property.DEMO_status.setCode('99')}</simple>
                     </script>
-                    <script>
+                    <script id="_script2">
                         <simple>${property.DEMO_status.setMessage('Cannot connect to backend')}</simple>
                     </script>
                 </doCatch>
@@ -74,21 +148,25 @@
             <doTry id="_doTry1">
                 <to id="_to3" uri="direct:backend-soap"/>
                 <convertBodyTo id="_convertBodyTo5" type="org.jboss.fis2.demo.soap.EmployeeList"/>
-                <doCatch>
+                <doCatch id="_doCatch2">
                     <exception>java.io.IOException</exception>
-                    <script>
+                    <script id="_script3">
                         <simple>${property.DEMO_status.setCode('99')}</simple>
                     </script>
-                    <script>
+                    <script id="_script4">
                         <simple>${property.DEMO_status.setMessage('Cannot connect to backend')}</simple>
                     </script>
                 </doCatch>
             </doTry>
             <bean id="_bean2" method="transformEmployeeListResponse" ref="processor"/>
+            <setHeader headerName="content-type" id="_setHeader13">
+                <constant>application/json</constant>
+            </setHeader>
         </route>
         <route id="addEmployee">
             <from id="_from8" uri="direct:addEmployee"/>
             <convertBodyTo id="_convertBodyTo11" type="org.jboss.fis2.demo.soap.Employee"/>
+            <log id="_log4" message="rest receive request ${body}"/>
             <setHeader headerName="operationNamespace" id="_setHeader9">
                 <constant>http://soap.demo.fis2.jboss.org/</constant>
             </setHeader>
@@ -104,12 +182,12 @@
             <doTry id="_doTry3">
                 <to id="_to5" uri="direct:backend-soap"/>
                 <convertBodyTo id="_convertBodyTo9" type="org.jboss.fis2.demo.soap.EmployeeList"/>
-                <doCatch>
+                <doCatch id="_doCatch3">
                     <exception>java.io.IOException</exception>
-                    <script>
+                    <script id="_script5">
                         <simple>${property.DEMO_status.setCode('99')}</simple>
                     </script>
-                    <script>
+                    <script id="_script6">
                         <simple>${property.DEMO_status.setMessage('Cannot connect to backend')}</simple>
                     </script>
                 </doCatch>
@@ -119,9 +197,19 @@
         <route id="addEmployeeBulkAsync">
             <from id="_from5" uri="direct:addEmployeeBulkAsync"/>
             <convertBodyTo id="_convertBodyTo6" type="org.jboss.fis2.demo.soap.EmployeeList"/>
-            <to id="_to4" pattern="InOnly" uri="amq:queue:addEmployeeBulk"/>
+            <log message="addEmployeeBulkAsync receive request: ${body}"/>
+            <split id="_split1">
+                <simple>${body.employees}</simple>
+                <setProperty id="_setProperty2" propertyName="employee">
+                    <simple>${body}</simple>
+                </setProperty>
+                <to id="_to4" pattern="InOnly" uri="amq:queue:addEmployee"/>
+            </split>
+            <script id="_script7">
+                <simple>${property.DEMO_status.setMessage('Request is accepted')}</simple>
+            </script>
             <setBody id="_setBody3">
-                <constant>Request is accepted</constant>
+                <simple>${property.DEMO_status}</simple>
             </setBody>
         </route>
         <route id="getEmployeeAll">

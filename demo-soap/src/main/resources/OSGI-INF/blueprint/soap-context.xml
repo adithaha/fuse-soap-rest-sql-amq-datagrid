@@ -47,7 +47,7 @@
             <to id="_to3" uri="sql:             select * from employee?             dataSource=dsFis2&amp;outputType=SelectList             &amp;outputClass=org.jboss.fis2.demo.soap.Employee"/>
             <bean id="_bean2" method="putEmployeeList" ref="myTransformer"/>
             <split id="_split1">
-                <simple>${property.employeeList.employeeList}</simple>
+                <simple>${property.employeeList.employees}</simple>
                 <setProperty id="_setProperty4" propertyName="employee">
                     <simple>${body}</simple>
                 </setProperty>
@@ -70,7 +70,7 @@
             <bean id="_bean4" method="putEmployeeList" ref="myTransformer"/>
             <log id="_log8" message="employeelist ${property.employeeList}"/>
             <split id="_split2">
-                <simple>${property.employeeList.employeeList}</simple>
+                <simple>${property.employeeList.employees}</simple>
                 <setProperty id="_setProperty6" propertyName="employee">
                     <simple>${body}</simple>
                 </setProperty>
@@ -101,7 +101,7 @@
             <split id="_split3">
                 <simple>${property.employee.phoneList}</simple>
                 <log id="_log12" message="phone: ${body}"/>
-                <to id="_to8" uri="sql:               insert into phone (employee_id, phone, type) values (:#${property.employee.id}, :#${body.phone}, :#${body.type})?               dataSource=dsFis2&amp;outputType=SelectOne"/>
+                <to id="_to8" uri="sql:               insert into phone (employee_id, number, type) values (:#${property.employee.id}, :#${body.number}, :#${body.type})?               dataSource=dsFis2&amp;outputType=SelectOne"/>
             </split>
             <setBody id="_setBody4">
                 <simple>${property.employee}</simple>
@@ -119,7 +119,7 @@
                 <simple>${body}</simple>
             </setProperty>
             <split id="_split4">
-                <simple>${property.employeeList.employeeList}</simple>
+                <simple>${property.employeeList.employees}</simple>
                 <log id="_log14" message="employee: ${body}"/>
                 <to id="_to9" uri="direct:addEmployee"/>
             </split>

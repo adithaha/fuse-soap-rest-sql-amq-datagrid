@@ -8,5 +8,29 @@
         <property name="dropRootElement" value="true"/>
         <property name="supportUnwrapped" value="false"/>
         <property name="ignoreNamespaces" value="true"/>
+        <!-- <property name="namespaceMap">
+        	<map>
+        		<entry key="http://rest.demo.fis2.jboss.org" value="b"/>
+        	</map>
+        </property> -->
+        <property name="inTransformElements">
+            <map>
+                <entry key="phone" value="{http://soap.demo.fis2.jboss.org/}phone"/>
+                <entry key="employee" value="{http://soap.demo.fis2.jboss.org/}employee"/>
+            	<entry key="employeeList" value="{http://soap.demo.fis2.jboss.org/}employeeList"/>
+            
+            </map>
+        </property>
     </bean>
+    <!-- <bean id="jacksonObjectMapper" class="org.codehaus.jackson.map.ObjectMapper">
+	    <property name="serializationInclusion" value="NON_NULL"/>
+	</bean>
+	
+	<bean id="jacksonProvider" class="org.codehaus.jackson.jaxrs.JacksonJsonProvider">
+	    <property name="mapper" ref="jacksonObjectMapper"/>
+	</bean> -->
+    <bean class="com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider" id="jacksonProvider"/>
+    <!-- <bean id="aegisJsonProvider" class="org.apache.cxf.jaxrs.provider.AegisJSONProvider">
+		<property name="ignoreNamespaces" value="true" />
+	</bean> -->
 </blueprint>
