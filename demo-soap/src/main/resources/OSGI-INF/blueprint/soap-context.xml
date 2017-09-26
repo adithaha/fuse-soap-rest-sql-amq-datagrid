@@ -108,25 +108,5 @@
             </setBody>
             <log id="_log2" message="send response ${body}"/>
         </route>
-        <route id="addEmployeeBulk">
-            <from id="_from6" uri="direct:addEmployeeBulk"/>
-            <convertBodyTo id="_convertBodyTo4" type="org.jboss.fis2.demo.soap.EmployeeList"/>
-            <log id="_log13" message="receive request ${body}"/>
-            <delay id="_delay1">
-                <constant>5000</constant>
-            </delay>
-            <setProperty id="_setProperty8" propertyName="employeeList">
-                <simple>${body}</simple>
-            </setProperty>
-            <split id="_split4">
-                <simple>${property.employeeList.employees}</simple>
-                <log id="_log14" message="employee: ${body}"/>
-                <to id="_to9" uri="direct:addEmployee"/>
-            </split>
-            <setBody id="_setBody5">
-                <simple>${property.employeeList}</simple>
-            </setBody>
-            <log id="_log15" message="send response ${body}"/>
-        </route>
     </camelContext>
 </blueprint>

@@ -47,18 +47,6 @@
       <xs:element form="qualified" minOccurs="0" name="return" type="tns:employee"/>
     </xs:sequence>
   </xs:complexType>
-  <xs:element name="addEmployeeBulk" type="tns:addEmployeeBulk"/>
-  <xs:complexType name="addEmployeeBulk">
-    <xs:sequence>
-      <xs:element form="qualified" minOccurs="0" name="arg0" type="tns:employeeList"/>
-    </xs:sequence>
-  </xs:complexType>
-  <xs:element name="addEmployeeBulkResponse" type="tns:addEmployeeBulkResponse"/>
-  <xs:complexType name="addEmployeeBulkResponse">
-    <xs:sequence>
-      <xs:element form="qualified" minOccurs="0" name="return" type="tns:employeeList"/>
-    </xs:sequence>
-  </xs:complexType>
   <xs:element name="getEmployeeAll" type="tns:getEmployeeAll"/>
   <xs:complexType name="getEmployeeAll">
     <xs:sequence/>
@@ -99,20 +87,12 @@
     <wsdl:part element="tns:addEmployeeResponse" name="parameters">
     </wsdl:part>
   </wsdl:message>
-  <wsdl:message name="addEmployeeBulkResponse">
-    <wsdl:part element="tns:addEmployeeBulkResponse" name="parameters">
-    </wsdl:part>
-  </wsdl:message>
   <wsdl:message name="getEmployeeResponse">
     <wsdl:part element="tns:getEmployeeResponse" name="parameters">
     </wsdl:part>
   </wsdl:message>
   <wsdl:message name="addEmployee">
     <wsdl:part element="tns:addEmployee" name="parameters">
-    </wsdl:part>
-  </wsdl:message>
-  <wsdl:message name="addEmployeeBulk">
-    <wsdl:part element="tns:addEmployeeBulk" name="parameters">
     </wsdl:part>
   </wsdl:message>
   <wsdl:message name="getEmployeeListResponse">
@@ -134,12 +114,6 @@
       <wsdl:input message="tns:getEmployee" name="getEmployee">
     </wsdl:input>
       <wsdl:output message="tns:getEmployeeResponse" name="getEmployeeResponse">
-    </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="addEmployeeBulk">
-      <wsdl:input message="tns:addEmployeeBulk" name="addEmployeeBulk">
-    </wsdl:input>
-      <wsdl:output message="tns:addEmployeeBulkResponse" name="addEmployeeBulkResponse">
     </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="getEmployeeAll">
@@ -172,15 +146,6 @@
         <soap:body use="literal"/>
       </wsdl:input>
       <wsdl:output name="getEmployeeResponse">
-        <soap:body use="literal"/>
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="addEmployeeBulk">
-      <soap:operation soapAction="" style="document"/>
-      <wsdl:input name="addEmployeeBulk">
-        <soap:body use="literal"/>
-      </wsdl:input>
-      <wsdl:output name="addEmployeeBulkResponse">
         <soap:body use="literal"/>
       </wsdl:output>
     </wsdl:operation>

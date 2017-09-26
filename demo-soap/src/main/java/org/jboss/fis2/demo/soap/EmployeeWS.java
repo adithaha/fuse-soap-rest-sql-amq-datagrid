@@ -8,6 +8,5 @@ public interface EmployeeWS {
 	public Employee getEmployee(Integer id);
 	public EmployeeList getEmployeeAll();
 	public EmployeeList getEmployeeList(String name);
-	public EmployeeList addEmployeeBulk(EmployeeList employeeList);
 	
 }

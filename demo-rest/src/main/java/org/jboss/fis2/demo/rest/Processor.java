@@ -2,6 +2,7 @@ package org.jboss.fis2.demo.rest;
 
 import org.apache.camel.Body;
 import org.apache.camel.ExchangeProperty;
+import org.jboss.fis2.demo.soap.Employee;
 import org.jboss.fis2.demo.soap.EmployeeList;
 
 public class Processor {
@@ -20,6 +21,17 @@ public class Processor {
         
         if (obj instanceof EmployeeList) {
         	response.setEmployeeList((EmployeeList)obj);
+        }        
+        
+		return response;
+    }
+	
+	public EmployeeResponse transformEmployeeResponse(@Body Object obj, @ExchangeProperty(value="DEMO_status") Status status) {
+        EmployeeResponse response = new EmployeeResponse();
+        response.setStatus(status);
+        
+        if (obj instanceof Employee) {
+        	response.setEmployee((Employee)obj);
         }        
         
 		return response;

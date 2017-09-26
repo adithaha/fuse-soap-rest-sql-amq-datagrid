@@ -14,14 +14,6 @@ import javax.ws.rs.core.MediaType;
 public class EmployeeRS {
 
 	
-	@POST
-    @Path("/testing")
-    public org.jboss.fis2.demo.soap.Phone testing(
-        org.jboss.fis2.demo.soap.Phone arg0
-    ) {
-    	return null;
-    }
-	
 	@GET
     @Path("/getemployeelist/{name}")
     public EmployeeListResponse getEmployeeList(
@@ -39,14 +31,6 @@ public class EmployeeRS {
     }
 
 	@POST
-    @Path("/addemployeebulk")
-    public EmployeeListResponse addEmployeeBulk(
-        org.jboss.fis2.demo.soap.EmployeeList arg0
-    ) {
-    	return null;
-    }
-
-	@POST
     @Path("/addemployeebulkasync")
     public Status addEmployeeBulkAsync(
         org.jboss.fis2.demo.soap.EmployeeList arg0
@@ -57,6 +41,12 @@ public class EmployeeRS {
 	@GET
     @Path("/getemployeeall")
     public EmployeeListResponse getEmployeeAll() {
+    	return null;
+    }
+
+	@GET
+    @Path("/getemployeeallcached")
+    public EmployeeListResponse getEmployeeAllCached() {
     	return null;
     }
 

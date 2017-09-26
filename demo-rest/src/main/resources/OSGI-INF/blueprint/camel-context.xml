@@ -99,13 +99,8 @@
                 <simple>direct:${header.operationName}</simple>
             </recipientList>
         </route>
-        <route id="testing">
-            <from id="_from10" uri="direct:testing"/>
-            <convertBodyTo id="_convertBodyTo13" type="org.jboss.fis2.demo.soap.Phone"/>
-            <log id="_log3" message="testing: ${body}"/>
-        </route>
-        <route id="getEmployeeAllWS">
-            <from id="_from2" uri="direct:getEmployeeAllWS"/>
+        <route id="getEmployeeAll">
+            <from id="_from2" uri="direct:getEmployeeAll"/>
             <setHeader headerName="operationNamespace" id="_setHeader1">
                 <constant>http://soap.demo.fis2.jboss.org/</constant>
             </setHeader>
@@ -173,27 +168,6 @@
             <to id="_to9" uri="direct:backend-soap"/>
             <convertBodyTo id="_convertBodyTo12" type="org.jboss.fis2.demo.soap.Employee"/>
         </route>
-        <route id="addEmployeeBulk">
-            <from id="_from6" uri="direct:addEmployeeBulk"/>
-            <convertBodyTo id="_convertBodyTo8" type="org.jboss.fis2.demo.soap.EmployeeList"/>
-            <setHeader headerName="operationNamespace" id="_setHeader5">
-                <constant>http://soap.demo.fis2.jboss.org/</constant>
-            </setHeader>
-            <doTry id="_doTry3">
-                <to id="_to5" uri="direct:backend-soap"/>
-                <convertBodyTo id="_convertBodyTo9" type="org.jboss.fis2.demo.soap.EmployeeList"/>
-                <doCatch id="_doCatch3">
-                    <exception>java.io.IOException</exception>
-                    <script id="_script5">
-                        <simple>${property.DEMO_status.setCode('99')}</simple>
-                    </script>
-                    <script id="_script6">
-                        <simple>${property.DEMO_status.setMessage('Cannot connect to backend')}</simple>
-                    </script>
-                </doCatch>
-            </doTry>
-            <bean id="_bean3" method="transformEmployeeListResponse" ref="processor"/>
-        </route>
         <route id="addEmployeeBulkAsync">
             <from id="_from5" uri="direct:addEmployeeBulkAsync"/>
             <convertBodyTo id="_convertBodyTo6" type="org.jboss.fis2.demo.soap.EmployeeList"/>
@@ -212,8 +186,8 @@
                 <simple>${property.DEMO_status}</simple>
             </setBody>
         </route>
-        <route id="getEmployeeAll">
-            <from id="_from7" uri="direct:getEmployeeAll"/>
+        <route id="getEmployeeAllCached">
+            <from id="_from7" uri="direct:getEmployeeAllCached"/>
             <setHeader headerName="CamelInfinispanCacheName" id="_setHeader12">
                 <constant>{{jdg.cache}}</constant>
             </setHeader>
